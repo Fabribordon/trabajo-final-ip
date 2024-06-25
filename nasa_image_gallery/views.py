@@ -41,6 +41,10 @@ def search(request):
     return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list})
 
 
+def login(request):
+    return render(request, 'registration/login.html')
+
+
 # las siguientes funciones se utilizan para implementar la sección de favoritos: traer los favoritos de un usuario, guardarlos, eliminarlos y desloguearse de la app.
 @login_required
 def getAllFavouritesByUser(request):
