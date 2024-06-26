@@ -4,7 +4,7 @@
 from django.shortcuts import redirect, render
 from .layers.services import services_nasa_image_gallery
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login, logout
 
 # función que invoca al template del índice de la aplicación.
 def index_page(request):
@@ -41,8 +41,18 @@ def search(request):
     return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list})
 
 
-def login(request):
-    return render(request, 'registration/login.html')
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/home')
+        else:
+            return render(request, 'registration/login.html', {'error': 'Datos incorrectos.'})
+    else:
+        return render(request, 'registration/login.html')
 
 
 # las siguientes funciones se utilizan para implementar la sección de favoritos: traer los favoritos de un usuario, guardarlos, eliminarlos y desloguearse de la app.
